@@ -3,27 +3,17 @@ const mongoose = require('mongoose');
 const cors = require('cors');
 require('dotenv').config();
 const authRoutes = require('./src/routes');
+const { corsMiddleware, handleCorsError } = require('./src/utils/cors'); // Adjust the path as needed
 
 const app = express();
 
 // Middleware
 app.use(express.json());
 app.use(require('morgan')('dev'));
-// Configure CORS
-// Define allowed origins from the .env file
-const allowedOrigins = process.env.ALLOWED_ORIGINS.split(',');
+app.use(express.urlencoded({ extended: true }));
 
-// Configure CORS middleware
-const corsOptions = {
-  origin: function (origin, callback) {
-    if (allowedOrigins.indexOf(origin) !== -1 || !origin) {
-      callback(null, true);
-    } else {
-      callback(new Error('Not allowed by CORS'));
-    }
-  },
-};
-app.use(cors(corsOptions));
+// CORS middleware
+app.use(corsMiddleware);
 
 // Routes
 app.get('/', (req, res) =>{
@@ -37,6 +27,9 @@ app.use('*', (req, res) =>{
 })
 // Start the server
 require('./src/db/').dbServer();
+
+// custom CORS error handler
+app.use(handleCorsError);
 
 const PORT = process.env.PORT || 3000;
 app.listen(PORT, () => {
