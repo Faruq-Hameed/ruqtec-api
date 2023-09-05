@@ -10,17 +10,19 @@ const app = express();
 app.use(express.json());
 app.use(require('morgan')('dev'));
 // Configure CORS
-const allowedOrigins = process.env.allowedOrigins; // Add your allowed origins here
+// Define allowed origins from the .env file
+const allowedOrigins = process.env.ALLOWED_ORIGINS.split(',');
+
+// Configure CORS middleware
 const corsOptions = {
   origin: function (origin, callback) {
     if (allowedOrigins.indexOf(origin) !== -1 || !origin) {
-      callback(null, true); // Allow if origin is in the allowed list or if it's not provided (e.g., a same-origin request)
+      callback(null, true);
     } else {
-      callback(new Error('Not allowed by CORS')); // Deny the request if the origin is not allowed
+      callback(new Error('Not allowed by CORS'));
     }
   },
 };
-
 app.use(cors(corsOptions));
 
 // Routes

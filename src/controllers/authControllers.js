@@ -1,11 +1,17 @@
 const {User} = require('../db');
 const nodemailer = require('nodemailer');
 const Mailgen = require('mailgen');
+const {validatedUserJoiSchema} = require('../utils/userJoiSchema')
 
 exports.register = async (req, res) => {
   try {
     // Create a new user
-    const newUser = await User.create({...req.body})
+    const validation = validatedUserJoiSchema(req.body)
+    if (validation.error) {
+        res.status(422).json(validation.error.details[0].message);
+        return;
+      }
+    const newUser = await User.create({...validation.value})
 
     // Send confirmation email
     const mailGenerator = new Mailgen({
