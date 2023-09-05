@@ -25,7 +25,7 @@ const userSchema = new mongoose.Schema(
       required: [true, "cannot accept registration without course"],
       enum: ["frontend", "backend", "data-science"],
     },
-    text: {
+    whyThisCourse: {
         type: String,
         required: [true, "cannot accept registration without reason"],
       },

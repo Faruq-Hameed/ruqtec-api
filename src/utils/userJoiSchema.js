@@ -7,7 +7,7 @@ function validatedUserJoiSchema(data) {
     email: joi.string().max(255).email().required(),
     phoneNumber: joi.string().max(255).required(),
     course: joi.string().max(255).required(),
-    text: joi.string().max().required(),
+    whyThisCourse: joi.string().required(),
   });
   return userSchema.validate(data);
 }
