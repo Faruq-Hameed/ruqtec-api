@@ -13,7 +13,7 @@ app.use(require('morgan')('dev'));
 app.use(express.urlencoded({ extended: true }));
 
 // CORS middleware
-app.use(corsMiddleware);
+app.use(cors());
 
 // Routes
 app.get('/', (req, res) =>{
@@ -29,7 +29,7 @@ app.use('*', (req, res) =>{
 require('./src/db/').dbServer();
 
 // custom CORS error handler
-app.use(handleCorsError);
+// app.use(handleCorsError);
 
 const PORT = process.env.PORT || 3000;
 app.listen(PORT, () => {
