@@ -6,6 +6,7 @@ const {validatedUserJoiSchema} = require('../utils/userJoiSchema')
 exports.register = async (req, res) => {
   try {
     // Create a new user
+    console.log('req.body: ' + req.body)
     const validation = validatedUserJoiSchema(req.body)
     if (validation.error) {
         res.status(422).json(validation.error.details[0].message);
@@ -52,7 +53,7 @@ exports.register = async (req, res) => {
     });
 
     const mailOptions = {
-      from: 'dev@ruqtec.com',
+      from: process.env.EMAIL_USER,
       to: newUser.email,
       subject: `Application for${newUser.course} received`,
       html: emailTemplate,
