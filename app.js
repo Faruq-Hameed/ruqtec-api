@@ -9,8 +9,8 @@ const app = express();
 
 // Middleware
 app.use(express.json());
-app.use(require('morgan')('dev'));
 app.use(express.urlencoded({ extended: true }));
+app.use(require('morgan')('dev'));
 
 // CORS middleware
 app.use(cors());

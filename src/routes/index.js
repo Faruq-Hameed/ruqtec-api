@@ -1,11 +1,12 @@
 const express = require('express');
 const router = express.Router();
 const { register } = require('../controllers/authControllers');
-
+const {User} = require('../db');
 // Registration route
 router.post('/register', register);
-router.get('/register', (req, res)=>{
-    res.status(200).json({message: 'please register via POST request'});
+router.get('/register', async (req, res)=>{
+    const users = await User.find({})
+    res.status(200).json({message: 'succesful', users});
 })
 router.post('/', (req, res)=>{
     console.log(req.body);
