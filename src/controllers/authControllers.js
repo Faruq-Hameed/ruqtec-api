@@ -6,11 +6,14 @@ const {validatedUserJoiSchema} = require('../utils/userJoiSchema')
 exports.register = async (req, res) => {
   try {
     // Create a new user
-    console.log('req.body: ' + req.body)
     const validation = validatedUserJoiSchema(req.body)
     if (validation.error) {
         res.status(422).json(validation.error.details[0].message);
         return;
+      }
+      const doesEmailAlreadyExist = await User.findOne({ email: validation.value.email}, '_id');
+      if (doesEmailAlreadyExist) {
+        return res.status(404).json({ message: "email already exists" });
       }
     const newUser = await User.create({...validation.value})
 
