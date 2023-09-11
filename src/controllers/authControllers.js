@@ -29,7 +29,7 @@ exports.register = async (req, res) => {
 
     const email = {
       body: {
-        name: newUser.firstName + newUser.lastName,
+        name: newUser.firstName + ' ' + newUser.lastName,
         intro: "Welcome to Ruqtec! We're very excited to have you on board.",
         action: {
           instructions:
@@ -70,3 +70,16 @@ exports.register = async (req, res) => {
     res.status(500).json({ message: 'Internal server error' });
   }
 };
+
+exports.getUsers = async (req, res)=>{
+  try{
+    const users = await User.find({})
+    .sort({ createdAt: -1 })
+  
+    res.status(200).json({message: 'succesfull', users});
+  }
+  catch (err) {
+    console.error(err);
+    res.status(500).json({ message: 'Internal server error' });
+  }
+}
