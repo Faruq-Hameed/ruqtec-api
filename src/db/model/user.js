@@ -40,7 +40,7 @@ const userSchema = new mongoose.Schema(
     course: {
       type: String,
       required: [true, "cannot accept registration without course"],
-      enum: ["frontend", "backend", "data-science"],
+      enum: ["frontend", "backend", "data-science", "product-design"],
     },
     whyThisCourse: {
       type: String,
