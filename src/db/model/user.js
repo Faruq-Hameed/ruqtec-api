@@ -45,10 +45,11 @@ const userSchema = new mongoose.Schema(
     whyThisCourse: {
       type: String,
       required: [true, "cannot accept registration without reason"],
-    },
-    couponCode: {
-      type: String,
-    },
+    }
+    // ,
+    // couponCode: {
+    //   type: String,
+    // },
   },
   { timestamps: true }
 );

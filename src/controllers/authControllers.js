@@ -7,7 +7,6 @@ exports.register = async (req, res) => {
   try {
     // Create a new user
     const validation = validatedUserJoiSchema(req.body)
-    console.log(req.body.phoneNumber)
     if (validation.error) {
         res.status(422).json(validation.error.details[0].message);
         return;

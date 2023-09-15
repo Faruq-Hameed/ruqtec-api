@@ -1,32 +1,35 @@
-// const joi = require('joi')
+// const joi = require("joi");
 
 // function validatedUserJoiSchema(data) {
 //   const userSchema = joi.object({
-//     firstName: joi.string().max(255).required(),
+//     firstName: joi.string().required(),
 //     lastName: joi.string().max(255).required(),
 //     email: joi.string().max(255).email().required(),
+//     age: joi.number(),
+//     gender: joi.string().valid("male", "female").required(),
 //     phoneNumber: joi.string().max(255).required(),
+//     address: joi.string().max(255).required(),
 //     course: joi.string().max(255).required(),
 //     whyThisCourse: joi.string().required(),
+//     couponCode: joi.string().max(255),
+//     studentOrCorper: joi.boolean().required()
 //   });
 //   return userSchema.validate(data);
 // }
 
-
-// module.exports = {validatedUserJoiSchema}
-
+// module.exports = { validatedUserJoiSchema };
 
 const joi = require('joi');
 
 function validatedUserJoiSchema(data) {
   const userSchema = joi.object({
-    firstName: joi.string().max(255).required().messages({
+    firstName: joi.string().required().messages({
       'string.base': 'First name must be a string',
       'string.empty': 'First name cannot be empty',
       'string.max': 'First name should have a maximum of {#limit} characters',
       'any.required': 'First name is required',
     }),
-    lastName: joi.string().max(255).required().messages({
+    lastName: joi.string().required().messages({
       'string.base': 'Last name must be a string',
       'string.empty': 'Last name cannot be empty',
       'string.max': 'Last name should have a maximum of {#limit} characters',
@@ -47,19 +50,19 @@ function validatedUserJoiSchema(data) {
       'boolean.base': 'Student/Corper must be a boolean',
       'any.required': 'Student/Corper field is required',
     }),
-    email: joi.string().max(255).email().required().messages({
+    email: joi.string().email().lowercase().required().messages({
       'string.base': 'Email must be a string',
       'string.empty': 'Email cannot be empty',
       'string.email': 'Invalid email format',
       'any.required': 'Email is required',
     }),
-    phoneNumber: joi.string().max(255).required().messages({
+    phoneNumber: joi.string().required().messages({
       'string.base': 'Phone number must be a string',
       'string.empty': 'Phone number cannot be empty',
       'string.max': 'Phone number should have a maximum of {#limit} characters',
       'any.required': 'Phone number is required',
     }),
-    address: joi.string().max(255).required().messages({
+    address: joi.string().required().messages({
       'string.base': 'Address must be a string',
       'string.empty': 'Address cannot be empty',
       'string.max': 'Address should have a maximum of {#limit} characters',
@@ -75,8 +78,9 @@ function validatedUserJoiSchema(data) {
       'string.base': 'Reason must be a string',
       'string.empty': 'Reason cannot be empty',
       'any.required': 'Reason is required',
-    }),
-    couponCode: joi.string().max(255),
+    })
+    // ,
+    // couponCode: joi.string().default('N/A'),
   });
 
   return userSchema.validate(data);
