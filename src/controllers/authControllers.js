@@ -3,7 +3,7 @@ const nodemailer = require('nodemailer');
 const Mailgen = require('mailgen');
 const {validatedUserJoiSchema} = require('../utils/userJoiSchema')
 
-exports.register = async (req, res) => {
+exports.register = async (req, res, next) => {
   try {
     // Create a new user
     const validation = validatedUserJoiSchema(req.body)
@@ -16,6 +16,7 @@ exports.register = async (req, res) => {
         return res.status(404).json({ message: "email already exists" });
       }
     const newUser = await User.create({...validation.value})
+    req.newUser = newUser //to passed to the next middleware
 
     // Send confirmation email
     const mailGenerator = new Mailgen({
@@ -59,6 +60,66 @@ exports.register = async (req, res) => {
       from: process.env.EMAIL_USER,
       to: newUser.email,
       subject: `Application for ${newUser.course} Received`,
+      html: emailTemplate,
+    };
+
+    await transporter.sendMail(mailOptions);
+    next();
+
+    // res.status(201).json({ message: 'Registration successful' });
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({ message: 'Internal server error' });
+  }
+};
+
+exports.notifyAdmin = async (req, res) => {
+  try {
+    
+    const newUser = req.newUser;
+    // Send confirmation email
+    const mailGenerator = new Mailgen({
+      theme: 'default',
+      product: {
+        name: 'RUQTEC',
+        link: 'https://ruqtec.com',
+        logo: 'https://ruqtec.com/Images/logo.png'
+      },
+    });
+
+    const email = {
+      body: {
+        name: newUser.firstName + ' ' + newUser.lastName,
+        intro:`A new student just applied for a course. The applicant details are available below; `,
+        action: {
+          instructions:
+           `Applicant Name: ${newUser.firstName + ' ' + newUser.lastName} . \n 
+           email: ${newUser.email} \n phone: ${newUser.phone} \n course: ${newUser.course} `,
+          button: {
+            color: "blue", // Optional action button color
+            text: "RUQTEC",
+            // link: 'https://mailgen.js/confirm?s=d9729feb74992cc3482b350163a1a010'
+          },
+        },
+        outro: "Need help, or have questions? Just reply to this email or  +2348061718441, we'd love to help.",
+      },
+    };
+
+    const emailTemplate = mailGenerator.generate(email);
+    const transporter = nodemailer.createTransport({
+      host: "ruqtec.com",
+      port: 465,
+      secure: true,
+      auth: {
+        user: process.env.EMAIL_USER,
+        pass: process.env.EMAIL_PASS,
+      },
+    });
+
+    const mailOptions = {
+      from: process.env.EMAIL_USER,
+      to: newUser.email,
+      subject: `Another Application Received for ${newUser.course}`,
       html: emailTemplate,
     };
 
