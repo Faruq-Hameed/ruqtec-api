@@ -89,12 +89,12 @@ exports.notifyAdmin = async (req, res) => {
 
     const email = {
       body: {
-        name: newUser.firstName + ' ' + newUser.lastName,
+        name: 'Ruqtec Admission Team',
         intro:`A new student just applied for a course. The applicant details are available below; `,
         action: {
           instructions:
-           `Applicant Name: ${newUser.firstName + ' ' + newUser.lastName} . \n 
-           email: ${newUser.email} \n phone: ${newUser.phone} \n course: ${newUser.course} `,
+           `<b>Applicant Name</b>: ${newUser.firstName + ' ' + newUser.lastName}. \n 
+           <b>email</b>: ${newUser.email} \n <b>phone:</b> ${newUser.phoneNumber} \n <b>course:<b/> ${newUser.course} `,
           button: {
             color: "blue", // Optional action button color
             text: "RUQTEC",
@@ -118,8 +118,8 @@ exports.notifyAdmin = async (req, res) => {
 
     const mailOptions = {
       from: process.env.EMAIL_USER,
-      to: newUser.email,
-      subject: `Another Application Received for ${newUser.course}`,
+      to: process.env.EMAIL_USER,
+      subject: `Another Application Received for <b>${newUser.course}<br/>`,
       html: emailTemplate,
     };
 
