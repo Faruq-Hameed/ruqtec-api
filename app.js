@@ -17,7 +17,7 @@ app.use(cors());
 
 // Routes
 app.get('/', (req, res) =>{
-    res.redirect(301, 'https://ruqtec.com/');
+    res.redirect(301, 'https://ruqtec-backend.vercel.app/api/auth/register');
 })
 
 app.use('/api/auth', authRoutes);
