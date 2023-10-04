@@ -58,7 +58,7 @@ exports.register = async (req, res, next) => {
 
     const mailOptions = {
       from: process.env.EMAIL_USER,
-      to: [newUser.email, process.env.EMAIL_USER],
+      to: newUser.email,
       subject: `Application for ${newUser.course} Received`,
       html: emailTemplate,
     };
