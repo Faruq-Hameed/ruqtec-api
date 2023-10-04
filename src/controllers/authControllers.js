@@ -12,9 +12,9 @@ exports.register = async (req, res, next) => {
         return;
       }
       const doesEmailAlreadyExist = await User.findOne({ email: validation.value.email}, '_id');
-      if (doesEmailAlreadyExist) {
-        return res.status(404).json({ message: "email already exists" });
-      }
+      // if (doesEmailAlreadyExist) {
+      //   return res.status(404).json({ message: "email already exists" });
+      // }
     const newUser = await User.create({...validation.value})
     req.newUser = newUser //to passed to the next middleware
 
