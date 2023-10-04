@@ -26,7 +26,7 @@ const userSchema = new mongoose.Schema(
     email: {
       type: String,
       required: [true, "cannot accept registration without email"],
-      unique: true,
+      // unique: true,
     },
 
     phoneNumber: {
