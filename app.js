@@ -6,6 +6,7 @@ const authRoutes = require('./src/routes');
 const { corsMiddleware, handleCorsError } = require('./src/utils/cors'); // Adjust the path as needed
 
 const app = express();
+require('./src/db/').dbServer();
 
 // Middleware
 app.use(express.json());
@@ -26,7 +27,6 @@ app.use('*', (req, res) =>{
     res.status(404).send('<h1>Invalid API end point</h1>');
 })
 // Start the server
-require('./src/db/').dbServer();
 
 // custom CORS error handler
 // app.use(handleCorsError);
