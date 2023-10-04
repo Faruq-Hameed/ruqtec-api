@@ -11,7 +11,7 @@ exports.register = async (req, res, next) => {
         res.status(422).json(validation.error.details[0].message);
         return;
       }
-      const doesEmailAlreadyExist = await User.findOne({ email: validation.value.email}, '_id');
+      // const doesEmailAlreadyExist = await User.findOne({ email: validation.value.email}, '_id');
       // if (doesEmailAlreadyExist) {
       //   return res.status(404).json({ message: "email already exists" });
       // }
@@ -44,8 +44,26 @@ exports.register = async (req, res, next) => {
         outro: "Need help, or have questions? Just reply to this email or  +2348061718441, we'd love to help.",
       },
     };
-
+    // const email_admin = {
+    //   body: {
+    //     name: 'Ruqtec Admission Team',
+    //     intro:`A new student just applied for a course. The applicant details are available below; `,
+    //     action: {
+    //       instructions:
+    //        `<b>Applicant Name</b>: ${newUser.firstName + ' ' + newUser.lastName}. \n 
+    //        <b>email</b>: ${newUser.email} \n <b>phone:</b> ${newUser.phoneNumber} \n <b>course:<b/> ${newUser.course} `,
+    //       button: {
+    //         color: "blue", // Optional action button color
+    //         text: "RUQTEC",
+    //         // link: 'https://mailgen.js/confirm?s=d9729feb74992cc3482b350163a1a010'
+    //       },
+    //     },
+    //     outro: "Need help, or have questions? Just reply to this email or  +2348061718441, we'd love to help.",
+    //   },
+    // };
     const emailTemplate = mailGenerator.generate(email);
+    // const emailTemplate_admin = mailGenerator.generate(email_admin);
+
     const transporter = nodemailer.createTransport({
       host: "ruqtec.com",
       port: 465,
@@ -62,8 +80,16 @@ exports.register = async (req, res, next) => {
       subject: `Application for ${newUser.course} Received`,
       html: emailTemplate,
     };
+    // const mailOptions_admin = {
+    //   from: process.env.EMAIL_USER,
+    //   to: newUser.email,
+    //   subject: `Another Application Received for <b>${newUser.course}<br/>`,
+    //   html: emailTemplate_admin,
+    // };
 
     await transporter.sendMail(mailOptions);
+    // await transporter.sendMail(mailOptions_admin);
+
     next();
 
     // res.status(201).json({ message: 'Registration successful' });
