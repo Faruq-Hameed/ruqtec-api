@@ -59,7 +59,9 @@ exports.register = async (req, res, next) => {
     course = course.charAt(0).toUpperCase() + course.slice(1);
     const mailOptions = {
       from: process.env.EMAIL_USER,
-      to: [newUser.email, process.env.EMAIL_USER],
+      to: [newUser.email, 
+        // process.env.EMAIL_USER
+      ],
       subject: `Application for ${course} Received`,
       html: emailTemplate,
     };
