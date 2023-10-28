@@ -55,18 +55,19 @@ exports.register = async (req, res, next) => {
         pass: process.env.EMAIL_PASS,
       },
     });
-
+    let course = newUser.course;
+    course = course.charAt(0).toUpperCase() + course.slice(1);
     const mailOptions = {
       from: process.env.EMAIL_USER,
       to: [newUser.email, process.env.EMAIL_USER],
-      subject: `Application for ${newUser.course} Received`,
+      subject: `Application for ${course} Received`,
       html: emailTemplate,
     };
     await transporter.sendMail(mailOptions);
 
-    // next();
+    next();
 
-    res.status(201).json({ message: 'Registration successful' });
+    // res.status(201).json({ message: 'Registration successful' });
   } catch (err) {
     console.error(err);
     res.status(500).json({ message: 'Internal server error' });
@@ -86,7 +87,8 @@ exports.notifyAdmin = async (req, res) => {
         logo: 'https://ruqtec.com/Images/logo.png'
       },
     });
-
+    let course = newUser.course;
+    course = course.charAt(0).toUpperCase() + course.slice(1);
     const email = {
       body: {
         name: 'Ruqtec Admission Team',
@@ -94,7 +96,7 @@ exports.notifyAdmin = async (req, res) => {
         action: {
           instructions:
            `<b>Applicant Name</b>: ${newUser.firstName + ' ' + newUser.lastName}. \n 
-           <b>email</b>: ${newUser.email} \n <b>phone:</b> ${newUser.phoneNumber} \n <b>course:<b/> ${newUser.course} `,
+           <b>email</b>: ${newUser.email} \n <b>phone:</b> ${newUser.phoneNumber} \n <b>course:<b/> ${course} `,
           button: {
             color: "blue", // Optional action button color
             text: "RUQTEC",
@@ -119,7 +121,7 @@ exports.notifyAdmin = async (req, res) => {
     const mailOptions = {
       from: process.env.EMAIL_USER,
       to: process.env.EMAIL_USER,
-      subject: `Another Application Received for <b>${newUser.course}<br/>`,
+      subject: `Another Application Received for <b>${course}<br/>`,
       html: emailTemplate,
     };
 
