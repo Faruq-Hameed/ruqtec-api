@@ -148,3 +148,11 @@ exports.getUsers = async (req, res)=>{
     res.status(500).json({ message: 'Internal server error' });
   }
 }
+
+exports.deleteUsers = async (req, res) => {
+  const valuesToDelete = req.body.users
+  const users = await User.find({})
+   await User.deleteMany({firstName: 'Faruq'})
+   await User.deleteMany({firstName: 'faruq'})
+
+}
