@@ -34,11 +34,13 @@ exports.register = async (req, res, next) => {
         intro: "Welcome to Ruqtec! We're very excited to have you on board.",
         action: {
           instructions:
-            "Kindly be on look out as we will email you in the next 48hrs on further instructions. Only via this email address.",
+            `<p> Kindly click the button below to choose your payment mode. 
+            <b>Note: you are not making the payment with the link</b> </p>
+            <p> If you already filled the payment form, you can ignore this action and expect further instructions from us within the next 48 business hours`,
           button: {
-            color: "blue", // Optional action button color
-            text: "RUQTEC",
-            // link: 'https://mailgen.js/confirm?s=d9729feb74992cc3482b350163a1a010'
+            color: "#0797DE", // Optional action button color
+            text: "<b>Payment Mode Link</b>",
+            link: 'https://forms.gle/1JhiukRzJ1MoUtSi6'
           },
         },
         outro: "Need help, or have questions? Just reply to this email or  +2348061718441, we'd love to help.",
