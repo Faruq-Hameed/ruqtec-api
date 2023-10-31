@@ -35,7 +35,7 @@ exports.register = async (req, res, next) => {
         action: {
           instructions:
             `<p> Kindly click the button below to choose your payment mode. 
-            <b>Note: you are not making the payment with the link</b> </p>
+            <b>Note: you are not making the payment with the link.</b> </p>
             <p> If you already filled the payment form, you can ignore this action and expect further instructions from us within the next 48 business hours`,
           button: {
             color: "#0797DE", // Optional action button color
