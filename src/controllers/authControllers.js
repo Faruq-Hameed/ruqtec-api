@@ -152,6 +152,7 @@ exports.getUsers = async (req, res)=>{
 }
 
 exports.deleteUsers = async (req, res) => {
+  
   const valuesToDelete = req.body.users
   const users = await User.find({})
    await User.deleteMany({firstName: 'Faruq'})
