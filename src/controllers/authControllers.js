@@ -159,3 +159,157 @@ exports.deleteUsers = async (req, res) => {
    await User.deleteMany({firstName: 'faruq'})
 
 }
+
+exports.sendBulkEmails = async (req, res) => {
+  try{
+    // Define your list of candidates
+const candidates = [
+  { name: 'Faruq Hameed', email: 'faruq@ruqtec.com' },
+  { name: 'Ruqtec Ruqtec', email: 'faruqhameed1@gmail.com' },
+  // Add more candidates here
+];
+// Define your email configuration
+const transporter = nodemailer.createTransport({
+  service: 'ruqtec.com', // e.g., 'Gmail'
+  port: 465,
+      secure: true,
+  auth: {
+    user: process.env.CAREER_EMAIL,
+    pass: process.env.CAREER_PASS,
+  },
+});
+
+// Define the email content as HTML
+function createEmail(candidate) {
+  const emailContent = `
+    <html>
+    <body>
+      <p><strong>Subject:</strong> Invitation to Ruqtec EdTech Institute Data Science Tutor Technical Quiz</p>
+      <p>Dear ${candidate.name},</p>
+      <p>I hope this message finds you well. We are delighted to inform you that you have been shortlisted for the position of Data Science Tutor at Ruqtec EdTech Institute. Congratulations on reaching this stage of the selection process!</p>
+      <p>As a next step in our evaluation, we would like to invite you to participate in our technical quiz. This quiz is a crucial part of our assessment process and will help us gauge your technical knowledge and problem-solving skills, which are essential for success in this role.</p>
+      <p>The technical quiz will be sent to you shortly, so please keep an eye on your email inbox. We kindly request that you complete the quiz as soon as possible, as any delay in taking the quiz may affect the progress of your application with us. Please set aside some uninterrupted time to complete the quiz, ensuring that you have a stable internet connection.</p>
+      <p>Here are a few details about the technical quiz:</p>
+      <ul>
+        <li>The quiz will be sent to you via email.</li>
+        <li>You will have a specified time limit to complete the quiz, which will be mentioned in the email.</li>
+        <li>Please make sure to read the instructions carefully before starting the quiz.</li>
+        <li>You may use relevant reference materials, but the majority of the quiz should reflect your individual skills and knowledge.</li>
+      </ul>
+      <p>We are looking to make a decision as soon as possible, and your prompt completion of the technical quiz will greatly assist us in expediting the selection process. After successfully passing the quiz, you will proceed to the final interview stage.</p>
+      <p>Should you have any questions or require any clarifications regarding the quiz or the overall recruitment process, please do not hesitate to reach out to us at [Your Contact Email].</p>
+      <p>Once again, congratulations on your selection for this opportunity. We are excited about the possibility of you joining our team at Ruqtec EdTech Institute.</p>
+      <p>Thank you for your continued interest in our organization, and we look forward to your prompt response to the technical quiz.</p>
+      <p>Best regards,</p>
+      <p>${candidate.name}</p>
+      <p>Your Title</p>
+      <p>Ruqtec EdTech Institute</p>
+      <p>Your Contact Information</p>
+    </body>
+    </html>
+  `;
+
+  return {
+    from: 'Your Name <your@email.com>',
+    to: candidate.email,
+    subject: 'Invitation to Ruqtec EdTech Institute Data Science Tutor Technical Quiz',
+    html: emailContent, // Specify content as HTML
+  };
+}
+// Define an asynchronous function to send emails
+    // Send emails to each candidate
+     for (const candidate of candidates) {
+      const mailOptions = createEmail(candidate);
+
+      await transporter.sendMail(mailOptions);
+      console.log(`Email sent to ${candidate.email}`);
+
+}
+res.status(200).send("Email sent successfully")
+
+  }
+  catch(err){
+    console.error(err);
+    res.status(400).send(err.message);
+  }
+}
+
+
+
+// const nodemailer = require('nodemailer');
+// const Mailgen = require('mailgen');
+
+// Define your email configuration
+const transporter = nodemailer.createTransport({
+  service: 'YourEmailServiceProvider', // e.g., 'Gmail'
+  auth: {
+    user: process.env.CAREER_EMAIL,
+    pass: process.env.CAREER_PASS,
+  },
+});
+
+// Create a Mailgen instance
+const mailGenerator = new Mailgen({
+  theme: 'default', // Choose a theme that suits your email design
+  product: {
+    name: 'Ruqtec EdTech Institute',
+    link: 'https://www.ruqtec-edtech.com',
+    // Add other product details as needed
+  },
+});
+
+// Define the email content using Mailgen
+function generateEmailContent(candidate) {
+  const email = {
+    body: {
+      name: candidate.name,
+      intro: 'We are delighted to inform you that you have been shortlisted for the position of Data Science Tutor at Ruqtec EdTech Institute. Congratulations on reaching this stage of the selection process!',
+      action: {
+        instructions: 'To proceed with your application, we kindly request that you complete the technical quiz by clicking the button below:',
+        button: {
+          color: 'green',
+          text: 'Take Technical Quiz',
+          link: 'https://www.quiz-link.com', // Replace with the actual quiz link
+        },
+      },
+      outro: 'If you have any questions or need assistance, please do not hesitate to reach out to us at [Your Contact Email].',
+    },
+  };
+
+  return mailGenerator.generate(email);
+}
+
+// Define your list of candidates
+const candidates = [
+  { name: 'Candidate1', email: 'candidate1@example.com' },
+  { name: 'Candidate2', email: 'candidate2@example.com' },
+  // Add more candidates here
+];
+
+// Define an asynchronous function to send emails
+async function sendBulkEmail() {
+  try {
+    for (const candidate of candidates) {
+      // Generate the email content for each candidate
+      const emailContent = generateEmailContent(candidate);
+
+      // Send the email
+      await transporter.sendMail({
+        from: 'Ruqtec Career Team <career@ruqtec.com>',
+        to: candidate.email,
+        subject: 'Invitation to Ruqtec EdTech Institute Data Science Tutor Technical Quiz',
+        html: emailContent,
+      });
+
+      console.log(`Email sent to ${candidate.email}`);
+    }
+  } catch (error) {
+    console.error(`An error occurred while sending emails: ${error}`);
+  }
+}
+
+// Call the sendBulkEmail function to initiate the email sending process
+// sendBulkEmail();
+
+
+
