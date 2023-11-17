@@ -152,12 +152,19 @@ exports.getUsers = async (req, res)=>{
 }
 
 exports.deleteUsers = async (req, res) => {
-  
-  const valuesToDelete = req.body.users
-  const users = await User.find({})
-   await User.deleteMany({firstName: 'Faruq'})
-   await User.deleteMany({firstName: 'faruq'})
-
+  try{
+    const valuesToDelete = req.body.users
+    const users = await User.find({})
+     await User.deleteMany({firstName: 'Faruq'})
+     await User.deleteMany({firstName: 'faruq'})
+     await User.deleteMany({lastName: 'Hameed'})
+     await User.deleteMany({lastName: 'hameed'})
+     res.status(200).send('deleting successful')
+  }
+ catch (err){
+  console.error('failed to delete', {error: err})
+  res.status(500).send('error deleting users')
+ }
 }
 
 exports.sendBulkEmails = async (req, res) => {
@@ -233,83 +240,5 @@ res.status(200).send("Email sent successfully")
     res.status(400).send(err.message);
   }
 }
-
-
-
-// const nodemailer = require('nodemailer');
-// const Mailgen = require('mailgen');
-
-// Define your email configuration
-const transporter = nodemailer.createTransport({
-  service: 'YourEmailServiceProvider', // e.g., 'Gmail'
-  auth: {
-    user: process.env.CAREER_EMAIL,
-    pass: process.env.CAREER_PASS,
-  },
-});
-
-// Create a Mailgen instance
-const mailGenerator = new Mailgen({
-  theme: 'default', // Choose a theme that suits your email design
-  product: {
-    name: 'Ruqtec EdTech Institute',
-    link: 'https://www.ruqtec-edtech.com',
-    // Add other product details as needed
-  },
-});
-
-// Define the email content using Mailgen
-function generateEmailContent(candidate) {
-  const email = {
-    body: {
-      name: candidate.name,
-      intro: 'We are delighted to inform you that you have been shortlisted for the position of Data Science Tutor at Ruqtec EdTech Institute. Congratulations on reaching this stage of the selection process!',
-      action: {
-        instructions: 'To proceed with your application, we kindly request that you complete the technical quiz by clicking the button below:',
-        button: {
-          color: 'green',
-          text: 'Take Technical Quiz',
-          link: 'https://www.quiz-link.com', // Replace with the actual quiz link
-        },
-      },
-      outro: 'If you have any questions or need assistance, please do not hesitate to reach out to us at [Your Contact Email].',
-    },
-  };
-
-  return mailGenerator.generate(email);
-}
-
-// Define your list of candidates
-const candidates = [
-  { name: 'Candidate1', email: 'candidate1@example.com' },
-  { name: 'Candidate2', email: 'candidate2@example.com' },
-  // Add more candidates here
-];
-
-// Define an asynchronous function to send emails
-async function sendBulkEmail() {
-  try {
-    for (const candidate of candidates) {
-      // Generate the email content for each candidate
-      const emailContent = generateEmailContent(candidate);
-
-      // Send the email
-      await transporter.sendMail({
-        from: 'Ruqtec Career Team <career@ruqtec.com>',
-        to: candidate.email,
-        subject: 'Invitation to Ruqtec EdTech Institute Data Science Tutor Technical Quiz',
-        html: emailContent,
-      });
-
-      console.log(`Email sent to ${candidate.email}`);
-    }
-  } catch (error) {
-    console.error(`An error occurred while sending emails: ${error}`);
-  }
-}
-
-// Call the sendBulkEmail function to initiate the email sending process
-// sendBulkEmail();
-
 
 
