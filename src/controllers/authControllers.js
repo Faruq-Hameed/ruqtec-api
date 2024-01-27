@@ -154,23 +154,17 @@ exports.getUsers = async (req, res)=>{
 exports.deleteDuplicateUser = async (req, res) => {
   try {
     const users = await User.find({}, "_id, email");
-    //convert all emails to lower case
-    users.forEach((user) => {
-      user.email = user.email.toLowerCase();
-    }
-    ); 
+    const unifiedEmails = users.map((user) => user.email.toLowerCase()); //convert all emails to lower case
     const userWithSingleEmails = [];
-    // const usersWithDuplicateInfo = []
-    users.filter((user) => {
+    const usersWithDuplicateInfo = []
+    unifiedEmails.filter((email) => {
       //if the is not in the email list add the email to the list
-      if (!userWithSingleEmails.includes(user))
-        userWithSingleEmails.push(user);
+      if (!userWithSingleEmails.includes(email)){
+        //find the index of the user object with the email in the users list
+        const userIndex = users.findIndex(user => user.email === email);
+      }
+        userWithSingleEmails.push();
     });
-    // users.filter((email) => {
-    //   //if the is not in the email list add the email to the list
-    //   if (usersWithDuplicateInfo.includes(email));
-    //    else usersWithDuplicateInfo.push(email);
-    // });
     res.status(200).json({message:'success', totalUsers: userWithSingleEmails.length, users: userWithSingleEmails});
    
   } 
