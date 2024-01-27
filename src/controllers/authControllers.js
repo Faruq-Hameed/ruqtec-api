@@ -156,24 +156,25 @@ exports.deleteDuplicateUser = async (req, res) => {
     const users = await User.find({}, "_id, email");
     const unifiedEmails = users.map((user) => user.email.toLowerCase()); //convert all emails to lower case
     const userWithSingleEmails = [];
-    const usersWithDuplicateInfo = []
+    const usersWithDuplicateInfo = [];
 
-    for (const user of users) { //
+    for (const user of users) {
+      //
       if (!userWithSingleEmails.includes(user.email)) {
         userWithSingleEmails.push(user.email); //add one user once only to this list
-      }
-      else usersWithDuplicateInfo.push(user);//add the user object with duplicate info to the list
+      } else usersWithDuplicateInfo.push(user); //add the user object with duplicate info to the list
     }
     //collect all one of the Ids of duplicates users with duplicate info
-    const duplicateUserIds   = usersWithDuplicateInfo.map(user => user._id)
-   //delete duplicates users
-    await User.deleteMany({_id: {$in: duplicateUserIds}})
-    res.
-    status(200)
-    .json(
-      {message:'success', totalSingleUsers: userWithSingleEmails.length,
-    totalDoubleUsers: usersWithDuplicateInfo.length, users: usersWithDuplicateInfo}
-    );
+    const duplicateUserIds = usersWithDuplicateInfo.map((user) => user._id);
+
+    //delete duplicates users i.e all Ids in duplicateUserIds array
+    await User.deleteMany({ _id: { $in: duplicateUserIds } });
+    res.status(200).json({
+      message: "success",
+      totalSingleUsers: userWithSingleEmails.length,
+      totalDoubleUsers: usersWithDuplicateInfo.length,
+      users: usersWithDuplicateInfo,
+    });
   } 
   
   
