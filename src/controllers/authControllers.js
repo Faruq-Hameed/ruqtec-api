@@ -160,14 +160,15 @@ exports.deleteDuplicateUser = async (req, res) => {
     unifiedEmails.filter((email) => {
       //if the is not in the email list add the email to the list
       if (!userWithSingleEmails.includes(email)){
-        //find the index of the user object with the email in the users list
-        const userIndex = users.findIndex(user => user.email === email);
+        userWithSingleEmails.push(email);
       }
-        userWithSingleEmails.push();
+      usersWithDuplicateInfo.push(email);
     });
+
     res.status(200).json({message:'success', totalUsers: userWithSingleEmails.length, users: userWithSingleEmails});
    
   } 
+  
   
   catch (err) {
     console.error(err);
