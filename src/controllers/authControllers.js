@@ -154,20 +154,25 @@ exports.getUsers = async (req, res)=>{
 exports.deleteDuplicateUser = async (req, res) => {
   try {
     const users = await User.find({}, "_id, email");
-    const unifiedEmails = users.map((user) => user.email.toLowerCase()); //convert all emails to lower case
-    // const userWithSingleEmails = [];
-    const usersWithDuplicateInfo = []
-    // unifiedEmails.filter((email) => {
-    //   //if the is not in the email list add the email to the list
-    //   if (!userWithSingleEmails.includes(email))
-    //     userWithSingleEmails.push(email);
-    // });
-    // res.status(200).json({message:'success', totalUsers: userWithSingleEmails.length, users: userWithSingleEmails});
-    unifiedEmails.filter((email) => {
+    //convert all emails to lower case
+    users.forEach((user) => {
+      user.email = user.email.toLowerCase();
+    }
+    ); 
+    const userWithSingleEmails = [];
+    // const usersWithDuplicateInfo = []
+    users.filter((user) => {
       //if the is not in the email list add the email to the list
-      if (usersWithDuplicateInfo.includes(email));
-       else usersWithDuplicateInfo.push(email);
+      if (!userWithSingleEmails.includes(user))
+        userWithSingleEmails.push(user);
     });
+    // users.filter((email) => {
+    //   //if the is not in the email list add the email to the list
+    //   if (usersWithDuplicateInfo.includes(email));
+    //    else usersWithDuplicateInfo.push(email);
+    // });
+    res.status(200).json({message:'success', totalUsers: userWithSingleEmails.length, users: userWithSingleEmails});
+   
   } 
   
   catch (err) {
