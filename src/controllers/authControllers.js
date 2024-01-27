@@ -156,12 +156,24 @@ exports.deleteDuplicateUser = async (req, res) => {
     const users = await User.find({}, "_id, email");
     const unifiedEmails = users.map((user) => user.email.toLowerCase()); //convert all emails to lower case
     const userSingleEmails = [];
+    const usersWithDuplicateInfo = []
     unifiedEmails.filter((email) => {
+      //if the is not in the email list add the email to the list
       if (!userSingleEmails.includes(email))
-        //if the is not in the email list
         userSingleEmails.push(email);
     });
-  } catch (err) {}
+
+//filter only user with single email only
+
+    unifiedEmails.filter((email) => {
+      //if the is not in the email list add the email to the list
+      if (usersWithDuplicateInfo.includes(email));
+       else usersWithDuplicateInfo.push(email);
+    });
+  } 
+  
+  
+  catch (err) {}
 };
 
 exports.deleteUsers = async (req, res) => {
