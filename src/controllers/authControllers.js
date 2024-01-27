@@ -143,13 +143,26 @@ exports.getUsers = async (req, res)=>{
     const users = await User.find({})
     .sort({ createdAt: -1 })
   
-    res.status(200).json({message: 'succesfull', users});
+    res.status(200).json({message: 'successful', totalUser: users.length, users});
   }
   catch (err) {
     console.error(err);
     res.status(500).json({ message: 'Internal server error' });
   }
 }
+
+exports.deleteDuplicateUser = async (req, res) => {
+  try {
+    const users = await User.find({}, "_id, email");
+    const unifiedEmails = users.map((user) => user.email.toLowerCase()); //convert all emails to lower case
+    const userSingleEmails = [];
+    unifiedEmails.filter((email) => {
+      if (!userSingleEmails.includes(email))
+        //if the is not in the email list
+        userSingleEmails.push(email);
+    });
+  } catch (err) {}
+};
 
 exports.deleteUsers = async (req, res) => {
   try{
