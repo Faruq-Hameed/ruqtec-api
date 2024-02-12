@@ -56,6 +56,8 @@ exports.register = async (req, res, next) => {
         user: process.env.EMAIL_USER,
         pass: process.env.EMAIL_PASS,
       },
+    //   debug: true, // Enable debugging output
+    // logger: true // Log to console
     });
     let course = newUser.course;
     course = course.charAt(0).toUpperCase() + course.slice(1);
@@ -124,7 +126,7 @@ exports.notifyAdmin = async (req, res) => {
 
     const mailOptions = {
       from: process.env.EMAIL_USER,
-      to: process.env.EMAIL_USER,
+      to: process.env.EMAIL_USER2,
       subject: `Another Application Received for <b>${course}<br/>`,
       html: emailTemplate,
     };
